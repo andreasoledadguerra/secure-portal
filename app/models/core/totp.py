@@ -12,3 +12,16 @@ def generate_secret(length=20):
 
 def _bytearray_to_int(byte_array):
     return int.from_bytes(byte_array, byteorder='big')
+
+def _generate_totp(secret_bytes, interval=30, digits=6):
+    # Calcular el contador de tiempo
+    counter = int(time.time()) // interval
+    counter_bytes = counter.to_bytes(8, byteorder='big')
+    # HMAC-SHA1
+    hmac_result = hmac.new(secret_bytes, counter_bytes, hashlib.sha1).digest()
+    # Dynamic truncation
+    offset = hmac_result[-1] & 0x0f
+    binary = _bytearray_to_int(hmac_result[offset:offset+4]) & 0x7fffffff
+    # Generar los dígitos
+    otp = binary % (10 ** digits)
+    return str(otp).zfill(digits)
