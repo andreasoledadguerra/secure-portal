@@ -40,3 +40,7 @@ def verify_totp(secret_base32, code, interval=30, window=1):
         if hmac.compare_digest(otp, code):
             return True
     return False
+
+def generate_totp_uri(secret_base32, email, issuer="SVP"):
+    """Generate URI otpauth:// for QR."""
+    return f"otpauth://totp/{issuer}:{email}?secret={secret_base32}&issuer={issuer}&algorithm=SHA1&digits=6&period=30"
