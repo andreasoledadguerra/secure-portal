@@ -1,6 +1,6 @@
 from datetime import datetime,timedelta, timezone
-from jose import jwt,JWTError
-from passlib.context import CryptContext
+from jose import jwt,JWTError #type: ignore
+from passlib.context import CryptContext #type: ignore
 from constants import SECRET_KEY, ALGORITHM
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
