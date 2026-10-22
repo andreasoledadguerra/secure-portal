@@ -9,3 +9,7 @@ class RegisterResponse(BaseModel):
     email: EmailStr
     totp_secret: str
     otpauth_uri: str
+
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: st
