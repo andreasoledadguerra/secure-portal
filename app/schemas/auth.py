@@ -5,3 +5,7 @@ class RegisterRequest(BaseModel):
     email: EmailStr
     password: str
 
+class RegisterResponse(BaseModel):
+    email: EmailStr
+    totp_secret: str
+    otpauth_uri: str
