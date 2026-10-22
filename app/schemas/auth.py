@@ -12,4 +12,8 @@ class RegisterResponse(BaseModel):
 
 class LoginRequest(BaseModel):
     email: EmailStr
-    password: st
+    password: str
+
+class TempTokenResponse(BaseModel):
+    temp_token: str
+    message: str = "Password verified. Please provide your TOTP code."
