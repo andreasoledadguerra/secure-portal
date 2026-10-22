@@ -17,3 +17,7 @@ class LoginRequest(BaseModel):
 class TempTokenResponse(BaseModel):
     temp_token: str
     message: str = "Password verified. Please provide your TOTP code."
+
+class VerifyMFARequest(BaseModel):
+    temp_token: str
+    totp_code: str
