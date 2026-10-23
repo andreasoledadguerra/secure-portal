@@ -4,14 +4,11 @@ import hmac
 import hashlib
 import time
 import base64
+import secrets
 
 def generate_secret(length=20):
-    import secrets
-    random_bytes = secrets.token_bytes(length)
-    return base64.b32encode(random_bytes).decode('utf-8').rstrip('=')
-
-def _bytearray_to_int(byte_array):
-    return int.from_bytes(byte_array, byteorder='big')
+    raw = secrets.token_bytes(length)
+    return base64.b32encode(raw).decode('utf-8').rstrip('=')
 
 def _generate_totp(secret_bytes, interval=30, digits=6):
     # Calcular el contador de tiempo
