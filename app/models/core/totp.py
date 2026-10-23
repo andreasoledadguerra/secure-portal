@@ -10,6 +10,15 @@ def generate_secret(length=20):
     raw = secrets.token_bytes(length)
     return base64.b32encode(raw).decode('utf-8').rstrip('=')
 
+def _hotp(secret_bytes: bytes, counter: int, digits: int = 6) -> str:
+    counter_bytes = counter.to_bytes(8, byteorder="big")
+    hmac_result = hmac.new(secret_bytes, counter_bytes, hashlib.sha1).digest()
+    offset = hmac_result[-1] & 0x0F
+    binary = int.from_bytes(hmac_result[offset:offset + 4], byteorder="big") & 0x7FFFFFFF
+    otp = binary % (10 ** digits)
+    return str(otp).zfill(digits)
+
+
 def _generate_totp(secret_bytes, interval=30, digits=6):
     # Calcular el contador de tiempo
     counter = int(time.time()) // interval
