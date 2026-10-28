@@ -18,3 +18,5 @@ app = FastAPI(title=settings.PROJECT_NAME, lifespan=lifespan)
 
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Auth"])
 app.include_router(users.router, prefix="/api/v1/users", tags=["Users"])
+
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
