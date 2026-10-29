@@ -2,8 +2,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-
+from app.api import auth, users
 from app.core.database import engine, Base
+from app.core.config import settings
 
 
 @asynccontextmanager
