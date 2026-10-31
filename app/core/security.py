@@ -19,3 +19,7 @@ def create_refresh_token(user_id: int) -> str:
     expire = datetime.now(timezone.utc) + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
     return jwt.encode({"sub": str(user_id), "type": "refresh", "exp": expire}, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
+def create_temp_token(user_id: int) -> str:
+    expire = datetime.now(timezone.utc) + timedelta(minutes=settings.TEMP_TOKEN_EXPIRE_MINUTES)
+    return jwt.encode({"sub": str(user_id), "type": "temp", "exp": expire}, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+
