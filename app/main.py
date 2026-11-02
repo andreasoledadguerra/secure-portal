@@ -5,13 +5,17 @@ from fastapi.responses import FileResponse
 from app.api import auth, users
 from app.core.database import engine, Base
 from app.core.config import settings
+from app.models.core.listeners import auth_event_listener
+
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)   # solo para desarrollo
+    await auth_event_listener.start()  # Inicia el listener de eventos de autenticación
     yield
+    await auth_event_listener.stop()  # Detiene el listener de eventos de autenticación
     await engine.dispose()
 
 app = FastAPI(title=settings.PROJECT_NAME, lifespan=lifespan)
