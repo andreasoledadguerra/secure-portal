@@ -71,3 +71,5 @@ class AuthEventListener:
         finally:
             self._running = False
             self._conn = None
+
+auth_event_listener = AuthEventListener()
