@@ -72,4 +72,17 @@ class AuthEventListener:
             self._running = False
             self._conn = None
 
+        async def notify_auth_event(event: str, email: str, extra: dict | None = None):
+            """
+            Envía una NOTIFY al canal 'auth_events'.
+            Usa una conexión asyncpg temporal (o reutiliza la del listener si la expones).
+            """
+            dsn = settings.DATABASE_URL.replace("postgresql+asyncpg://", "postgresql://")
+            payload = {"event": event, "email": email, **(extra or {})}
+            conn = await asyncpg.connect(dsn)
+            try:
+                await conn.execute("SELECT pg_notify('auth_events', $1)", json.dumps(payload))
+            finally:
+                await conn.close()
+
 auth_event_listener = AuthEventListener()
