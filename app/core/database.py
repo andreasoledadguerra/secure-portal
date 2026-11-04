@@ -24,3 +24,19 @@ AsyncSessionLocal = async_sessionmaker(
 )
 
 Base = declarative_base()
+
+
+# Dependency to get a database session
+async def get_db() -> AsyncSession:
+    """
+    Entrega una sesión por petición y la cierra al terminar.
+    FastAPI ejecuta el código después del 'yield' cuando termina la request.
+    """
+    async with AsyncSessionLocal() as session:
+        try:
+            yield session
+        except Exception:
+            await session.rollback()
+            raise
+        finally:
+            await session.close()
