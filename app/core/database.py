@@ -15,3 +15,10 @@ engine = create_async_engine(
     pool_pre_ping=True, 
 )
 
+# Declarative base for SQLAlchemy models
+AsyncSessionLocal = async_sessionmaker(
+    bind=engine,
+    class_=AsyncSession,
+    expire_on_commit=False,  # evita recargar objetos tras commit
+    autoflush=False,         # control manual del flush
+)
