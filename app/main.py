@@ -5,7 +5,7 @@ from fastapi.responses import FileResponse
 from app.api import auth, users
 from app.core.database import engine, Base
 from app.core.config import settings
-from app.models.core.listeners import auth_event_listener
+from app.core.listeners import auth_event_listener
 
 
 
