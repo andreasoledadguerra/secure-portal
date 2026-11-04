@@ -19,6 +19,8 @@ engine = create_async_engine(
 AsyncSessionLocal = async_sessionmaker(
     bind=engine,
     class_=AsyncSession,
-    expire_on_commit=False,  # evita recargar objetos tras commit
-    autoflush=False,         # control manual del flush
+    expire_on_commit=False,  
+    autoflush=False,        
 )
+
+Base = declarative_base()
