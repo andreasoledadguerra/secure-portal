@@ -15,7 +15,7 @@ engine = create_async_engine(
     pool_pre_ping=True, 
 )
 
-# Declarative base for SQLAlchemy models
+#session generator
 AsyncSessionLocal = async_sessionmaker(
     bind=engine,
     class_=AsyncSession,
@@ -23,6 +23,7 @@ AsyncSessionLocal = async_sessionmaker(
     autoflush=False,        
 )
 
+# Declarative base for SQLAlchemy models
 Base = declarative_base()
 
 
