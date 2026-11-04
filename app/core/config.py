@@ -7,7 +7,7 @@ class Settings(BaseSettings):
 
     # --- Base de datos ---
     # URL con driver asyncpg (para SQLAlchemy async)
-    DATABASE_URL: str = "postgresql+asyncpg://postgres:password@db:5432/svp_db"
+    DATABASE_URL: str = "postgresql+asyncpg://postgres:password@db:localhost/svp_db"
 
     # --- Seguridad / JWT ---
     SECRET_KEY: str = "change-me-in-production-use-a-long-random-string"

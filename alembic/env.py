@@ -11,13 +11,12 @@ from alembic import context
 # Importa tu Base y tus modelos para que autogenerate los detecte
 from app.core.database import Base
 from app.core.config import settings
-import app.models.user  # noqa: F401  (registra el modelo User en Base.metadata)
+import app.models.user  
 
 config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Sobrescribe la URL con la de tu aplicación (la que usa asyncpg)
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
 target_metadata = Base.metadata
