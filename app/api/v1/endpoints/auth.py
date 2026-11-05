@@ -11,3 +11,5 @@ from app.schemas.auth import (
 )
 from app.services import auth_service
 from app.models.user import User
+
+router = APIRouter()
