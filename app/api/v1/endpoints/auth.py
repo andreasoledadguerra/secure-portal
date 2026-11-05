@@ -58,3 +58,19 @@ async def verify_mfa(data: VerifyMFARequest, db: AsyncSession = Depends(get_db))
         access_token=security.create_access_token(user.id),
         refresh_token=security.create_refresh_token(user.id)
     )
+
+@router.post("/refresh", response_model=TokenResponse)
+async def refresh(data: RefreshRequest):
+    try:
+        payload = security.decode_token(data.refresh_token)
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid refresh token")
+    
+    if payload.get("type") != "refresh":
+        raise HTTPException(status_code=401, detail="Wrong token type")
+    
+    user_id = int(payload["sub"])
+    return TokenResponse(
+        access_token=security.create_access_token(user_id),
+        refresh_token=security.create_refresh_token(user_id)
+    )
