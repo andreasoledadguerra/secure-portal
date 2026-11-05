@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from app.api import auth, users
+from app.api.v1.endpoints import auth, users
 from app.core.database import engine, Base
 from app.core.config import settings
 from app.core.listeners import auth_event_listener
