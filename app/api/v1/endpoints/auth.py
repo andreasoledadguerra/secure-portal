@@ -26,3 +26,11 @@ async def register(data: RegisterRequest, db: AsyncSession = Depends(get_db)):
         totp_secret=user.totp_secret,
         otpauth_uri=totp.generate_otpauth_uri(user.totp_secret, user.email)
     )
+
+@router.post("/login", response_model=TempTokenResponse)
+async def login(data: LoginRequest, db: AsyncSession = Depends(get_db)):
+    user = await auth_service.authenticate_password(db, data.email, data.password)
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    return TempTokenResponse(temp_token=security.create_temp_token(user.id))
