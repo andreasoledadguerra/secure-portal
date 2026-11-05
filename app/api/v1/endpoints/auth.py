@@ -34,3 +34,27 @@ async def login(data: LoginRequest, db: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
     return TempTokenResponse(temp_token=security.create_temp_token(user.id))
+
+@router.post("/verify-mfa", response_model=TokenResponse)
+async def verify_mfa(data: VerifyMFARequest, db: AsyncSession = Depends(get_db)):
+    try:
+        payload = security.decode_token(data.temp_token)
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid or expired temp token")
+    
+    if payload.get("type") != "temp":
+        raise HTTPException(status_code=401, detail="Wrong token type")
+    
+    user_id = int(payload["sub"])
+    user = await db.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=401, detail="User not found")
+    
+    ok = await auth_service.verify_mfa(db, user, data.totp_code)
+    if not ok:
+        raise HTTPException(status_code=401, detail="Invalid TOTP code")
+    
+    return TokenResponse(
+        access_token=security.create_access_token(user.id),
+        refresh_token=security.create_refresh_token(user.id)
+    )
