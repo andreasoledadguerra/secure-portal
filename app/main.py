@@ -11,8 +11,7 @@ from app.core.listeners import auth_event_listener
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)   # solo para desarrollo
+    #async with engine.begin() as conn:
     await auth_event_listener.start()  # Inicia el listener de eventos de autenticación
     yield
     await auth_event_listener.stop()  # Detiene el listener de eventos de autenticación
