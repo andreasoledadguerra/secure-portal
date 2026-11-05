@@ -11,7 +11,7 @@ from alembic import context
 # Importa tu Base y tus modelos para que autogenerate los detecte
 from app.core.database import Base
 from app.core.config import settings
-import app.models.user  
+from app.models.user  import User
 
 config = context.config
 if config.config_file_name is not None:
