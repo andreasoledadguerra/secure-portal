@@ -45,3 +45,40 @@ async def authenticate_password(db: AsyncSession, email: str, password: str) -> 
 
     await notify_auth_event("password_ok", email, {"user_id": user.id})
     return user
+
+async def verify_mfa(db: AsyncSession, user: User, code: str) -> bool:
+    """Verifica el código TOTP (segundo factor) con bloqueo por intentos fallidos."""
+    now = datetime.now(timezone.utc)
+
+    # Si la cuenta está bloqueada temporalmente, rechazar
+    if user.locked_until and user.locked_until > now:
+        await notify_auth_event(
+            "mfa_locked",
+            user.email,
+            {"locked_until": user.locked_until.isoformat()},
+        )
+        return False
+
+    # Verificar el código TOTP
+    if totp.verify_totp(user.totp_secret, code):
+        user.failed_mfa_attempts = 0
+        user.locked_until = None
+        await db.commit()
+        await notify_auth_event("mfa_ok", user.email, {"user_id": user.id})
+        return True
+
+    # Código incorrecto: incrementar contador y aplicar bloqueo si corresponde
+    user.failed_mfa_attempts += 1
+    locked = False
+    if user.failed_mfa_attempts >= settings.MAX_FAILED_MFA_ATTEMPTS:
+        user.locked_until = now + timedelta(minutes=settings.LOCKOUT_MINUTES)
+        user.failed_mfa_attempts = 0
+        locked = True
+    await db.commit()
+
+    await notify_auth_event(
+        "mfa_failed",
+        user.email,
+        {"attempts": user.failed_mfa_attempts, "locked": locked},
+    )
+    return False
