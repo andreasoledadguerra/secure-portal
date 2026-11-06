@@ -29,3 +29,19 @@ async def register_user(db: AsyncSession, email: str, password: str) -> User:
     # Emitir evento de auditoría
     await notify_auth_event("user_registered", email, {"user_id": user.id})
     return user
+
+async def authenticate_password(db: AsyncSession, email: str, password: str) -> User | None:
+    """Verifica email + contraseña (primer factor)."""
+    result = await db.execute(select(User).where(User.email == email))
+    user = result.scalar_one_or_none()
+
+    if not user:
+        await notify_auth_event("password_failed", email, {"reason": "user_not_found"})
+        return None
+
+    if not verify_password(password, user.hashed_password):
+        await notify_auth_event("password_failed", email, {"reason": "wrong_password"})
+        return None
+
+    await notify_auth_event("password_ok", email, {"user_id": user.id})
+    return user
