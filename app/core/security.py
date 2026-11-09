@@ -30,5 +30,9 @@ def create_access_token(user_id: int) -> str:
     expire = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     return create_jwt({"sub": str(user_id), "type": "access"}, expire)
 
+def create_refresh_token(user_id: int) -> str:
+    expire = timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+    return _create_jwt({"sub": str(user_id), "type": "refresh"}, expire)
+
 def decode_jwt(token: str) -> dict:
     return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
