@@ -25,7 +25,7 @@ def create_jwt(data: dict, expires_delta: timedelta) -> str:
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + expires_delta
     to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 def create_access_token(user_id: int) -> str:
     expire = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -39,5 +39,5 @@ def create_temp_token(user_id: int) -> str:
     expire = timedelta(minutes=settings.TEMP_TOKEN_EXPIRE_MINUTES)
     return create_jwt({"sub": str(user_id), "type": "temp"}, expire)
 
-def decode_jwt(token: str) -> dict:
-    return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+def decode_token(token: str) -> dict:
+    return jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
