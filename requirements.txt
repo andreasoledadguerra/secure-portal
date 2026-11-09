@@ -19,3 +19,4 @@ qrcode[pil]
 pytest
 pytest-asyncio
 httpx
+bcrypt==4.0.1

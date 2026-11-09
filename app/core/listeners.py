@@ -84,5 +84,6 @@ async def notify_auth_event(event: str, email: str, extra: dict | None = None):
         await conn.execute("SELECT pg_notify('auth_events', $1)", json.dumps(payload))
     finally:
         await conn.close()
+        
 
 auth_event_listener = AuthEventListener()
