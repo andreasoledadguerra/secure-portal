@@ -2,6 +2,7 @@ from datetime import datetime,timedelta, timezone
 from jose import jwt,JWTError #type: ignore
 from passlib.context import CryptContext #type: ignore
 from constants import SECRET_KEY, ALGORITHM
+from app.core.config import settings
 
 pwd_context = CryptContext(
     schemes=["bcrypt"], 
