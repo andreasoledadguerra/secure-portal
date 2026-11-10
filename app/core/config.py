@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     # --- TOTP ---
     TOTP_INTERVAL_SECONDS: int = 30
     TOTP_DIGITS: int = 6
-    TOTP_WINDOW: int = 1  # ±1 intervalo de tolerancia
+    TOTP_WINDOW: int = 5  # ±1 intervalo de tolerancia
 
     # --- Carga desde .env ---
     model_config = SettingsConfigDict(
