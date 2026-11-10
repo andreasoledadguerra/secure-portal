@@ -1,7 +1,7 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError
-#from app.core.security import decode_jwt
+from app.core.security import decode_token
 from app.models.user import User
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
@@ -15,7 +15,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = decode_jwt(token)
+        payload = decode_token(token)
         user_id: int = payload.get("sub")
         if user_id is None:
             raise credentials_exception
