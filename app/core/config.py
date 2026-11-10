@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     TEMP_TOKEN_EXPIRE_MINUTES: int = 5
 
     # --- MFA / bloqueo ---
-    MAX_FAILED_MFA_ATTEMPTS: int = 5
+    MAX_FAILED_LOGIN_ATTEMPTS: int = 5
     LOCKOUT_MINUTES: int = 15
 
     # --- TOTP ---
