@@ -68,17 +68,17 @@ async def verify_mfa(db: AsyncSession, user: User, code: str) -> bool:
         return True
 
     # Código incorrecto: incrementar contador y aplicar bloqueo si corresponde
-    user.failed_mfa_attempts += 1
+    user.failed_login_attempts += 1
     locked = False
-    if user.failed_mfa_attempts >= settings.MAX_FAILED_MFA_ATTEMPTS:
+    if user.failed_login_attempts >= settings.MAX_FAILED_LOGIN_ATTEMPTS:
         user.locked_until = now + timedelta(minutes=settings.LOCKOUT_MINUTES)
-        user.failed_mfa_attempts = 0
+        user.failed_login_attempts = 0
         locked = True
     await db.commit()
 
     await notify_auth_event(
         "mfa_failed",
         user.email,
-        {"attempts": user.failed_mfa_attempts, "locked": locked},
+        {"attempts": user.failed_login_attempts, "locked": locked},
     )
     return False
