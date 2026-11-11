@@ -4,14 +4,7 @@ from httpx import AsyncClient, ASGITransport
 from app.main import app # qué app ES ESTA?
 from app.core import totp
 
-
-# tests/test_auth.py
-import pytest
-import time
-from httpx import AsyncClient, ASGITransport
-from app.main import app
-from app.core import totp
-
+@pytest.mark.asyncio
 async def test_full_mfa_flow():
     # Unique email for testing to avoid conflicts
     test_email = f"test_{int(time.time())}@example.com"
