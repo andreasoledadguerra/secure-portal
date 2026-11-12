@@ -10,10 +10,11 @@ async function register() {
     });
     const data = await res.json();
     if (res.ok) {
-        document.getElementById('register-section').classList.add('hidden');
         document.getElementById('mfa-setup').classList.remove('hidden');
         document.getElementById('totp-secret').innerText = data.totp_secret;
         document.getElementById('otpauth-uri').innerText = data.otpauth_uri;
+        document.getElementById('reg-result').innerText = "Successful registration! Now login down below.";
+        document.getElementById('reg-result').className = 'success';
     } else {
         document.getElementById('reg-result').innerText = data.detail;
         document.getElementById('reg-result').className = 'error';
