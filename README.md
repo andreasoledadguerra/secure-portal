@@ -56,3 +56,6 @@ The project includes an integration test that simulates the complete flow (Regis
 
 - Frontend: A minimalist HTML/Vanilla JS interface served by FastAPI itself to demonstrate the flow without the need for a separate Node.js server.
 
+
+## 📄 License
+This project is licensed under the MIT License.
