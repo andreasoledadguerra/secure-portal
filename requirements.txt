@@ -16,7 +16,7 @@ python-jose[cryptography]
 passlib[bcrypt]
 python-multipart
 qrcode[pil]
-psycopg==3.3.9
+psycopg[binary]
 pytest
 pytest-asyncio
 httpx
